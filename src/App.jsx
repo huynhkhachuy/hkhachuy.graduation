@@ -3,6 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { Experience } from "./components/Experience";
 import { UI } from "./components/UI";
+import { useEffect } from "react";
+
 
 function App() {
   return (
