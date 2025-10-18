@@ -174,7 +174,7 @@ export const UI = () => {
 
   return (
     <>
-      <main className="pointer-events-none select-none z-10 fixed inset-0 flex justify-between flex-col">
+        <main className="pointer-events-none select-none z-10 fixed inset-0 min-h-[100svh] flex justify-between flex-col">
         <a
           className="pointer-events-auto mt-10 ml-10"
           href="https://lessons.wawasensei.dev/courses/react-three-fiber"
@@ -239,7 +239,7 @@ export const UI = () => {
       </main>
 
       {/* ===== BGM Controls ===== */}
-      <div className="pointer-events-auto fixed right-4 sm:left-5 sm:right-auto bottom-[calc(env(safe-area-inset-bottom)+110px)] sm:bottom-5 z-50">
+      <div className="pointer-events-auto fixed left-4 bottom-[calc(env(safe-area-inset-bottom)+24px)] sm:left-5 sm:bottom-5 z-50">
         <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-3 py-1.5 text-white shadow-lg hover:bg-white/20 transition-all duration-200">
           <button
             onClick={togglePlay}
