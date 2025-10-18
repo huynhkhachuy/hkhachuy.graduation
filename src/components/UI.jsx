@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ===== Ảnh trang =====
 const pictures = [
-  "DSC00680", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+  "DSC00680", "2", "3", "4", "5", "6", "7", "8", "9", "10", "17", "18", "11", "12", "13", "14", "15", "16",
 ];
 
 // ===== Atoms =====
@@ -172,96 +172,97 @@ export const UI = () => {
     }
   };
 
-  return (
-    <>
-      <main className="pointer-events-none select-none z-10 fixed inset-0 flex justify-between flex-col">
-        <a
-          className="pointer-events-auto mt-10 ml-10"
-          href="https://lessons.wawasensei.dev/courses/react-three-fiber"
-        >
-          <img className="w-20" src="/images/wawasensei-white.png" alt="Logo" />
-        </a>
+return (
+  <>
+    <main className="pointer-events-none select-none z-10 fixed inset-0 flex justify-between flex-col">
+      <a
+        className="pointer-events-auto mt-10 ml-10"
+        href="https://lessons.wawasensei.dev/courses/react-three-fiber"
+      >
+        <img className="w-20" src="/images/wawasensei-white.png" alt="Logo" />
+      </a>
 
-        {/* Nút chuyển trang */}
-        <div className="w-full overflow-auto pointer-events-auto flex justify-center">
-          <div className="overflow-auto flex items-center gap-2 max-w-full p-6">
-            {[...pages].map((_, index) => (
-              <button
-                key={index}
-                className={`border transition-all duration-200 px-3 py-1.5 rounded-full text-xs sm:text-sm uppercase shrink-0
-          ${index === page ? "bg-white/90 text-black border-white" : "bg-black/30 text-white border-transparent hover:border-white/70"}`}
-                onClick={() => setPage(index)}
-              >
-                {index === 0 ? "Cover" : `Page ${index}`}
-              </button>
-            ))}
-
+      {/* Nút chuyển trang */}
+      {/* ✅ thêm padding-bottom để né cụm BGM + safe-area */}
+      <div className="w-full overflow-auto pointer-events-auto flex justify-center pb-[calc(env(safe-area-inset-bottom)+88px)] sm:pb-6">
+        <div className="overflow-auto flex items-center gap-2 max-w-full p-6">
+          {[...pages].map((_, index) => (
             <button
+              key={index}
               className={`border transition-all duration-200 px-3 py-1.5 rounded-full text-xs sm:text-sm uppercase shrink-0
-        ${page === pages.length ? "bg-white/90 text-black border-white" : "bg-black/30 text-white border-transparent hover:border-white/70"}`}
-              onClick={() => setPage(pages.length)}
+          ${index === page ? "bg-white/90 text-black border-white" : "bg-black/30 text-white border-transparent hover:border-white/70"}`}
+              onClick={() => setPage(index)}
             >
-              Back
+              {index === 0 ? "Cover" : `Page ${index}`}
             </button>
-          </div>
-        </div>
-      </main>
+          ))}
 
-      {/* BGM Controls (gọn) */}
-      <div className="pointer-events-auto fixed left-5 bottom-5 z-50">
-        <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-3 py-1.5 text-white shadow-lg hover:bg-white/20 transition-all duration-200">
           <button
-            onClick={togglePlay}
-            className="rounded-full p-1.5 hover:bg-white/20 transition"
-            aria-label={isPlaying ? "Pause" : "Play"}
-            title={isMutedAutoplay ? "Nhấn để bật tiếng" : isPlaying ? "Tạm dừng" : "Phát"}
+            className={`border transition-all duration-200 px-3 py-1.5 rounded-full text-xs sm:text-sm uppercase shrink-0
+        ${page === pages.length ? "bg-white/90 text-black border-white" : "bg-black/30 text-white border-transparent hover:border-white/70"}`}
+            onClick={() => setPage(pages.length)}
           >
-            {isPlaying ? <FiPause size={14} /> : <FiPlay size={14} />}
+            Back
           </button>
+        </div>
+      </div>
+    </main>
 
-          <div className="flex items-center gap-1">
-            {bgmVolume > 0 && !(audioRef.current?.muted) ? (
-              <FiVolume2 size={13} />
-            ) : (
-              <FiVolumeX size={13} />
-            )}
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={bgmVolume}
-              onChange={(e) => setBgmVolume(parseFloat(e.target.value))}
-              className="w-32 h-0.5 accent-white cursor-pointer"
-              aria-label="Background music volume"
-            />
-          </div>
+    {/* BGM Controls (gọn) */}
+    {/* ✅ nhích lên trên ở màn nhỏ + slider ngắn hơn để giảm chiếm chỗ */}
+    <div className="pointer-events-auto fixed left-4 sm:left-5 bottom-24 sm:bottom-5 z-50">
+      <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-3 py-1.5 text-white shadow-lg hover:bg-white/20 transition-all duration-200">
+        <button
+          onClick={togglePlay}
+          className="rounded-full p-1.5 hover:bg-white/20 transition"
+          aria-label={isPlaying ? "Pause" : "Play"}
+          title={isMutedAutoplay ? "Nhấn để bật tiếng" : isPlaying ? "Tạm dừng" : "Phát"}
+        >
+          {isPlaying ? <FiPause size={14} /> : <FiPlay size={14} />}
+        </button>
 
-          <span className="text-[10px] opacity-70 font-mono w-8 text-right">
-            {Math.round(bgmVolume * 100)}%
-          </span>
+        <div className="flex items-center gap-1">
+          {bgmVolume > 0 && !(audioRef.current?.muted) ? (
+            <FiVolume2 size={13} />
+          ) : (
+            <FiVolumeX size={13} />
+          )}
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={bgmVolume}
+            onChange={(e) => setBgmVolume(parseFloat(e.target.value))}
+            className="w-24 sm:w-32 h-0.5 accent-white cursor-pointer"
+            aria-label="Background music volume"
+          />
         </div>
 
-        {/* Nhắc “Tap to unmute” khi đang autoplay mute */}
-        {isPlaying && isMutedAutoplay && (
-          <div className="mt-2 text-[11px] text-white/90 bg-black/40 border border-white/15 px-2 py-1 rounded-md">
-            Đang phát im lặng — nhấn Play để bật tiếng
-          </div>
-        )}
+        <span className="text-[10px] opacity-70 font-mono w-8 text-right">
+          {Math.round(bgmVolume * 100)}%
+        </span>
       </div>
 
-      {/* ---- Time & Location (bottom-right, above page buttons) ---- */}
-      <div className="fixed right-6 bottom-28 z-40 text-right pointer-events-none select-none">
-        <RevealText
-          text="11:00 — 25.10.2025"
-          className="text-white/95 text-sm md:text-base font-semibold tracking-wide drop-shadow"
-        />
-        <RevealText
-          text="FPT University Can Tho Campus"
-          className="text-white/80 text-xs md:text-sm mt-1 drop-shadow"
-          delay={0.02}
-        />
-      </div>
+      {isPlaying && isMutedAutoplay && (
+        <div className="mt-2 text-[11px] text-white/90 bg-black/40 border border-white/15 px-2 py-1 rounded-md">
+          Đang phát im lặng — nhấn Play để bật tiếng
+        </div>
+      )}
+    </div>
+
+    {/* ---- Time & Location ---- */}
+    <div className="fixed right-6 bottom-28 z-40 text-right pointer-events-none select-none">
+      <RevealText
+        text="11:00 — 25.10.2025"
+        className="text-white/95 text-sm md:text-base font-semibold tracking-wide drop-shadow"
+      />
+      <RevealText
+        text="FPT University Can Tho Campus"
+        className="text-white/80 text-xs md:text-sm mt-1 drop-shadow"
+        delay={0.02}
+      />
+    </div>
 
       {/* Ticker chữ chạy */}
       <div className="fixed inset-0 flex items-center -rotate-2 select-none z-0">
