@@ -1,13 +1,16 @@
-// vite.config.js
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { fileURLToPath, URL } from "node:url";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+const isVercel = !!process.env.VERCEL
+// nếu vẫn dùng GitHub Pages repo name khác, đổi bên dưới:
+const GH_REPO = '/hkhachuy.graduation/'
 
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-    },
+  base: isVercel ? '/' : GH_REPO,
+  build: {
+    sourcemap: false,
+    target: 'es2019',
+    modulePreload: { polyfill: false },
   },
-});
+})

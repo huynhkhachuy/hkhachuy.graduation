@@ -1,7 +1,7 @@
 // src/components/UI.jsx
 import { atom, useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { FiPlay, FiPause, FiVolume2, FiVolumeX } from "react-icons/fi";
+import { FiPlay, FiPause, FiVolume2, FiVolumeX, FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
@@ -172,97 +172,132 @@ export const UI = () => {
     }
   };
 
-return (
-  <>
-    <main className="pointer-events-none select-none z-10 fixed inset-0 flex justify-between flex-col">
-      <a
-        className="pointer-events-auto mt-10 ml-10"
-        href="https://lessons.wawasensei.dev/courses/react-three-fiber"
-      >
-        <img className="w-20" src="/images/wawasensei-white.png" alt="Logo" />
-      </a>
-
-      {/* Nút chuyển trang */}
-      {/* ✅ thêm padding-bottom để né cụm BGM + safe-area */}
-      <div className="w-full overflow-auto pointer-events-auto flex justify-center pb-[calc(env(safe-area-inset-bottom)+88px)] sm:pb-6">
-        <div className="overflow-auto flex items-center gap-2 max-w-full p-6">
-          {[...pages].map((_, index) => (
-            <button
-              key={index}
-              className={`border transition-all duration-200 px-3 py-1.5 rounded-full text-xs sm:text-sm uppercase shrink-0
-          ${index === page ? "bg-white/90 text-black border-white" : "bg-black/30 text-white border-transparent hover:border-white/70"}`}
-              onClick={() => setPage(index)}
-            >
-              {index === 0 ? "Cover" : `Page ${index}`}
-            </button>
-          ))}
-
-          <button
-            className={`border transition-all duration-200 px-3 py-1.5 rounded-full text-xs sm:text-sm uppercase shrink-0
-        ${page === pages.length ? "bg-white/90 text-black border-white" : "bg-black/30 text-white border-transparent hover:border-white/70"}`}
-            onClick={() => setPage(pages.length)}
-          >
-            Back
-          </button>
-        </div>
-      </div>
-    </main>
-
-    {/* BGM Controls (gọn) */}
-    {/* ✅ nhích lên trên ở màn nhỏ + slider ngắn hơn để giảm chiếm chỗ */}
-    <div className="pointer-events-auto fixed left-4 sm:left-5 bottom-24 sm:bottom-5 z-50">
-      <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-3 py-1.5 text-white shadow-lg hover:bg-white/20 transition-all duration-200">
-        <button
-          onClick={togglePlay}
-          className="rounded-full p-1.5 hover:bg-white/20 transition"
-          aria-label={isPlaying ? "Pause" : "Play"}
-          title={isMutedAutoplay ? "Nhấn để bật tiếng" : isPlaying ? "Tạm dừng" : "Phát"}
+  return (
+    <>
+      <main className="pointer-events-none select-none z-10 fixed inset-0 flex justify-between flex-col">
+        <a
+          className="pointer-events-auto mt-10 ml-10"
+          href="https://lessons.wawasensei.dev/courses/react-three-fiber"
         >
-          {isPlaying ? <FiPause size={14} /> : <FiPlay size={14} />}
-        </button>
+          <img className="w-20" src="/images/wawasensei-white.png" alt="Logo" />
+        </a>
 
-        <div className="flex items-center gap-1">
-          {bgmVolume > 0 && !(audioRef.current?.muted) ? (
-            <FiVolume2 size={13} />
-          ) : (
-            <FiVolumeX size={13} />
-          )}
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={bgmVolume}
-            onChange={(e) => setBgmVolume(parseFloat(e.target.value))}
-            className="w-24 sm:w-32 h-0.5 accent-white cursor-pointer"
-            aria-label="Background music volume"
-          />
+        {/* ===== Nút chuyển trang (4 nút gộp) ===== */}
+        <div className="w-full pointer-events-auto flex justify-center pb-[calc(env(safe-area-inset-bottom)+100px)] sm:pb-5">
+          <div
+            className="flex items-center gap-2 px-4 py-2
+               text-white rounded-full 
+               border border-white/25 
+               backdrop-blur-xl 
+               bg-white/10 
+               shadow-[0_8px_24px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.2)]
+               hover:bg-white/15 transition-all duration-200"
+          >
+            {/* Cover */}
+            <button
+              className={`px-3 py-1 rounded-full text-[11px] sm:text-xs uppercase tracking-wide transition-all duration-200
+        ${page === 0
+                  ? "bg-white/90 text-black border border-white"
+                  : "bg-white/10 border border-white/20 hover:bg-white/20"
+                }`}
+              onClick={() => setPage(0)}
+            >
+              COVER
+            </button>
+
+            {/* ← Prev */}
+            <button
+              className="rounded-full p-1.5 bg-white/10 border border-white/20 hover:bg-white/20 transition"
+              onClick={() => setPage(Math.max(0, page - 1))}
+              aria-label="Previous page"
+            >
+              <FiArrowLeft size={13} />
+            </button>
+
+            {/* → Next */}
+            <button
+              className="rounded-full p-1.5 bg-white/10 border border-white/20 hover:bg-white/20 transition"
+              onClick={() => setPage(Math.min(pages.length - 1, page + 1))}
+              aria-label="Next page"
+            >
+              <FiArrowRight size={13} />
+            </button>
+
+            {/* Back */}
+            <button
+              className={`px-3 py-1 rounded-full text-[11px] sm:text-xs uppercase tracking-wide transition-all duration-200
+        ${page === pages.length
+                  ? "bg-white/90 text-black border border-white"
+                  : "bg-white/10 border border-white/20 hover:bg-white/20"
+                }`}
+              onClick={() => setPage(pages.length)}
+            >
+              BACK
+            </button>
+          </div>
+        </div>
+      </main>
+
+      {/* ===== BGM Controls ===== */}
+      <div className="pointer-events-auto fixed right-4 sm:left-5 sm:right-auto bottom-[calc(env(safe-area-inset-bottom)+110px)] sm:bottom-5 z-50">
+        <div className="flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-3 py-1.5 text-white shadow-lg hover:bg-white/20 transition-all duration-200">
+          <button
+            onClick={togglePlay}
+            className="rounded-full p-1.5 hover:bg-white/20 transition"
+            aria-label={isPlaying ? "Pause" : "Play"}
+            title={
+              isMutedAutoplay
+                ? "Nhấn để bật tiếng"
+                : isPlaying
+                  ? "Tạm dừng"
+                  : "Phát"
+            }
+          >
+            {isPlaying ? <FiPause size={14} /> : <FiPlay size={14} />}
+          </button>
+
+          <div className="flex items-center gap-1">
+            {bgmVolume > 0 && !(audioRef.current?.muted) ? (
+              <FiVolume2 size={13} />
+            ) : (
+              <FiVolumeX size={13} />
+            )}
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={bgmVolume}
+              onChange={(e) => setBgmVolume(parseFloat(e.target.value))}
+              className="w-20 sm:w-32 h-0.5 accent-white cursor-pointer"
+              aria-label="Background music volume"
+            />
+          </div>
+
+          <span className="hidden sm:inline text-[10px] opacity-70 font-mono w-8 text-right">
+            {Math.round(bgmVolume * 100)}%
+          </span>
         </div>
 
-        <span className="text-[10px] opacity-70 font-mono w-8 text-right">
-          {Math.round(bgmVolume * 100)}%
-        </span>
+        {isPlaying && isMutedAutoplay && (
+          <div className="mt-2 text-[11px] text-white/90 bg-black/40 border border-white/15 px-2 py-1 rounded-md">
+            Đang phát im lặng — nhấn Play để bật tiếng
+          </div>
+        )}
       </div>
 
-      {isPlaying && isMutedAutoplay && (
-        <div className="mt-2 text-[11px] text-white/90 bg-black/40 border border-white/15 px-2 py-1 rounded-md">
-          Đang phát im lặng — nhấn Play để bật tiếng
-        </div>
-      )}
-    </div>
-
-    {/* ---- Time & Location ---- */}
-    <div className="fixed right-6 bottom-28 z-40 text-right pointer-events-none select-none">
-      <RevealText
-        text="11:00 — 25.10.2025"
-        className="text-white/95 text-sm md:text-base font-semibold tracking-wide drop-shadow"
-      />
-      <RevealText
-        text="FPT University Can Tho Campus"
-        className="text-white/80 text-xs md:text-sm mt-1 drop-shadow"
-        delay={0.02}
-      />
-    </div>
+      {/* ===== Time & Location ===== */}
+      <div className="fixed right-6 bottom-[calc(env(safe-area-inset-bottom)+180px)] sm:bottom-28 z-40 text-right pointer-events-none select-none">
+        <RevealText
+          text="11:00 — 25.10.2025"
+          className="text-white/95 text-sm md:text-base font-semibold tracking-wide drop-shadow"
+        />
+        <RevealText
+          text="FPT University Can Tho Campus"
+          className="text-white/80 text-xs md:text-sm mt-1 drop-shadow"
+          delay={0.02}
+        />
+      </div>
 
       {/* Ticker chữ chạy */}
       <div className="fixed inset-0 flex items-center -rotate-2 select-none z-0">
